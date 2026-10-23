@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bank Insights</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo">◔</span> Bank Insights <span class="pill">100% local</span></div>
+  <nav class="tabs" id="tabs">
+    <button data-tab="overview" class="active">Overview</button>
+    <button data-tab="transactions">Transactions</button>
+  </nav>
+  <div class="actions">
+    <select id="period" title="Period"></select>
+    <select id="currency" title="Currency">
+      <option>EUR</option><option>USD</option><option>GBP</option><option>CHF</option>
+    </select>
+    <button class="btn primary" id="uploadBtn">＋ Add statements</button>
+    <details class="menu">
+      <summary class="btn">⋯</summary>
+      <div class="menu-body">
+        <button id="exportCsv">Export CSV</button>
+        <button id="exportJson">Backup (JSON)</button>
+        <button id="importJson">Restore backup</button>
+        <button id="clearAll" class="danger">Delete all data</button>
+      </div>
+    </details>
+  </div>
+  <input type="file" id="fileInput" multiple accept=".pdf,.csv,.png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff" hidden>
+  <input type="file" id="jsonInput" accept=".json" hidden>
+</header>
+
+<main>
+  <section id="empty" class="drop big" hidden>
+    <div class="drop-inner">
+      <div class="drop-icon">⇪</div>
+      <h1>Drop your bank statements here</h1>
+      <p>PDF, CSV or scanned images. Everything is read on this computer with offline OCR.<br>No data is ever uploaded.</p>
+      <button class="btn primary" id="uploadBtn2">Choose files</button>
+    </div>
+  </section>
+
+  <section id="overview" class="view">
+    <div class="kpis" id="kpis"></div>
+    <div class="grid">
+      <div class="card span2"><h3>Income vs. spending by month</h3><div class="chart-h"><canvas id="cMonthly"></canvas></div></div>
+      <div class="card"><h3>Where the money goes</h3><div class="donut-wrap"><div class="chart-h sm"><canvas id="cCat"></canvas></div><div id="catList" class="catlist"></div></div></div>
+      <div class="card span2"><h3>Spending over time</h3><div class="chart-h"><canvas id="cDaily"></canvas></div></div>
+      <div class="card"><h3>Spending by weekday</h3><div class="chart-h"><canvas id="cWeek"></canvas></div></div>
+      <div class="card"><h3>Top merchants</h3><div id="merchants" class="bars"></div></div>
+      <div class="card"><h3>Biggest expenses</h3><div id="biggest" class="rows"></div></div>
+      <div class="card"><h3>Recurring payments <span id="recTotal" class="muted"></span></h3><div id="recurring" class="rows"></div></div>
+      <div class="card span3"><h3>Insights</h3><ul id="insights" class="insights"></ul></div>
+    </div>
+  </section>
+
+  <section id="transactions" class="view" hidden>
+    <div class="filters">
+      <input id="q" type="search" placeholder="Search description or merchant…">
+      <select id="fCat"></select>
+      <select id="fType"><option value="all">All</option><option value="out">Spending</option><option value="in">Income</option></select>
+      <span id="txCount" class="muted"></span>
+    </div>
+    <div class="card flush">
+      <table id="txTable">
+        <thead><tr>
+          <th data-sort="date">Date</th><th>Description</th><th>Category</th><th data-sort="amount" class="r">Amount</th><th></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <button class="btn more" id="moreBtn" hidden>Show more</button>
+    </div>
+  </section>
+</main>
+
+<aside id="log" class="log" hidden>
+  <div class="log-head"><b>Import</b><button id="logClose" class="x">×</button></div>
+  <div id="logBody"></div>
+</aside>
+<div id="dropOverlay" class="overlay" hidden>Drop files to import</div>
+
+<script src="vendor/chart.umd.js"></script>
+<script src="vendor/tesseract.min.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
